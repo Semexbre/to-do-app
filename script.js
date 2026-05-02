@@ -1,24 +1,17 @@
+const taskForm = document.getElementById("task-form");
+const confirmCloseDialog = document.getElementById("confirm-close-dialog");
 const openTaskFormBtn = document.getElementById("open-task-form-btn");
-
-const tasForm = document.getElementById("task-form");
-
 const closeTaskFormBtn = document.getElementById("close-task-form-btn");
-
+const addOrUpdateTaskBtn = document.getElementById("add-or-update-task-btn");
+const cancelBtn = document.getElementById("cancel-btn");
+const discardBtn = document.getElementById("discard-btn");
+const tasksContainer = document.getElementById("tasks-container");
 const titleInput = document.getElementById("title-input");
-
+const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
 
-const dateInput = document.getElementById("date-input");
-
-const addOrUpdate = document.getElementById("add-or-update-task-btn");
-
-const cancelBtn = document.getElementById("cancel-btn");
-
-const discardBtn = document.getElementById("discard-btn");
-
-const tasksContainer = document.getElementById("tasks-container");
-
-const taskData = [];
+// Load saved tasks from localStorage, or start with an empty array
+const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
 
 const addOrUpdateTask = () => {
@@ -32,25 +25,59 @@ const addOrUpdateTask = () => {
 
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
+  } else {
+    taskData[dataArrIndex] = taskObj;
   }
 
+  // Save updated array to localStorage
+  localStorage.setItem("data", JSON.stringify(taskData));
+
   updateTaskContainer();
-reset();
+  reset();
 };
-const updateTaskContainer = () =>{
-    taskData.forEach(
-    ({ id, title, date, description }) => {
-        tasksContainer.innerHTML += `
-        <div class="task" id="${id}">
-          <p><strong>Title:</strong> ${title}</p>
-          <p><strong>Date:</strong> ${date}</p>
-          <p><strong>Description:</strong> ${description}</p>
-          <button type="button" onclick="editTask(this)" class="btn">Edit</button>
-          <button type="button" onclick="deleteTask(this)" class="btn">Delete</button>
-        </div>
-      `
-    }
+
+const updateTaskContainer = () => {
+  tasksContainer.innerHTML = "";
+
+  taskData.forEach(({ id, title, date, description }) => {
+    tasksContainer.innerHTML += `
+      <div class="task" id="${id}">
+        <p><strong>Title:</strong> ${title}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <button onclick="editTask(this)" type="button" class="btn">Edit</button>
+        <button onclick="deleteTask(this)" type="button" class="btn">Delete</button>
+      </div>
+    `;
+  });
+};
+
+const deleteTask = (buttonEl) => {
+  const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
   );
+
+  buttonEl.parentElement.remove();
+  taskData.splice(dataArrIndex, 1);
+
+  // Save updated array to localStorage after deletion
+  localStorage.setItem("data", JSON.stringify(taskData));
+};
+
+const editTask = (buttonEl) => {
+  const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
+  );
+
+  currentTask = taskData[dataArrIndex];
+
+  titleInput.value = currentTask.title;
+  dateInput.value = currentTask.date;
+  descriptionInput.value = currentTask.description;
+
+  addOrUpdateTaskBtn.innerText = "Update Task";
+
+  taskForm.classList.toggle("hidden");
 };
 
 const reset = () => {
@@ -58,7 +85,13 @@ const reset = () => {
   dateInput.value = "";
   descriptionInput.value = "";
   taskForm.classList.toggle("hidden");
+  addOrUpdateTaskBtn.innerText = "Add Task"; // Reset button text after editing
   currentTask = {};
+};
+
+// If there are saved tasks, render them on page load
+if (taskData.length > 0) {
+  updateTaskContainer();
 }
 
 openTaskFormBtn.addEventListener("click", () =>
@@ -66,8 +99,15 @@ openTaskFormBtn.addEventListener("click", () =>
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
-  const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-  if (formInputsContainValues) {
+  const formInputsContainValues =
+    titleInput.value || dateInput.value || descriptionInput.value;
+
+  const formInputValuesUpdated =
+    titleInput.value !== currentTask.title ||
+    dateInput.value !== currentTask.date ||
+    descriptionInput.value !== currentTask.description;
+
+  if (formInputsContainValues && formInputValuesUpdated) {
     confirmCloseDialog.showModal();
   } else {
     reset();
@@ -79,13 +119,9 @@ cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
 discardBtn.addEventListener("click", () => {
   confirmCloseDialog.close();
   reset();
-  
 });
 
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
-
-
-    addOrUpdateTask()
+  addOrUpdateTask();
 });
