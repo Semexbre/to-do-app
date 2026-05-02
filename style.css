@@ -1,0 +1,287 @@
+/* ===== Todo App CSS ===== */
+/* Aesthetic: Clean editorial with warm accents */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:          #f5f0e8;
+  --surface:     #fffdf9;
+  --border:      #e0d9ce;
+  --accent:      #c0562a;
+  --accent-dim:  #e8d5cb;
+  --text-primary:#1c1a17;
+  --text-muted:  #7a7268;
+  --radius:      10px;
+  --shadow:      0 2px 12px rgba(0,0,0,0.08);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+main {
+  width: 100%;
+  max-width: 560px;
+}
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 28px;
+}
+
+/* ===== Wrapper ===== */
+.todo-app {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 18px;
+  border: 1.5px solid var(--text-primary);
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.btn:hover {
+  background: var(--text-primary);
+  color: var(--surface);
+}
+
+.large-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: var(--radius);
+}
+
+#open-task-form-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+#open-task-form-btn:hover {
+  background: #a8461f;
+  border-color: #a8461f;
+  color: #fff;
+}
+
+/* ===== Task Form ===== */
+.task-form {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.task-form.hidden {
+  display: none;
+}
+
+.task-form-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 14px 0;
+}
+
+.close-task-form-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+
+.close-task-form-btn:hover {
+  background: var(--accent-dim);
+}
+
+.close-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.task-form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 24px 20px;
+}
+
+.task-form-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.form-control {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  width: 100%;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  outline: none;
+  resize: vertical;
+}
+
+.form-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.task-form-footer {
+  padding: 0 24px 24px;
+}
+
+#add-or-update-task-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  margin-top: 4px;
+}
+
+#add-or-update-task-btn:hover {
+  background: #a8461f;
+  border-color: #a8461f;
+  color: #fff;
+}
+
+/* ===== Dialog ===== */
+dialog {
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 28px 24px;
+  background: var(--surface);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  max-width: 320px;
+  width: 90%;
+}
+
+dialog::backdrop {
+  background: rgba(28, 26, 23, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+.discard-message-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.confirm-close-dialog-btn-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#cancel-btn {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+#cancel-btn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+#discard-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+#discard-btn:hover {
+  background: #a8461f;
+  border-color: #a8461f;
+}
+
+/* ===== Tasks Container ===== */
+#tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.task {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: slideIn 0.22s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.task p {
+  font-size: 0.93rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.task p strong {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.task .btn {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+/* Inline edit/delete buttons row */
+.task-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
